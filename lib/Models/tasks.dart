@@ -7,6 +7,7 @@ class Member {
   late String name;
   late String description;
   late String task_uid;
+  late DateTime date_finish_before;
 
 
   late DocumentReference ref;
@@ -18,6 +19,7 @@ class Member {
     name = data!["name"];
     description = data!["description"];
     task_uid = data!["task_uid"];
+    date_finish_before = data!["date_finish_before"];
   }
 
   Map toMap() {
@@ -26,6 +28,7 @@ class Member {
       "task_uid": task_uid,
       "name": name,
       "description": description,
+      "date_finish_before": date_finish_before,
     };
   }
 

@@ -5,6 +5,9 @@ import 'package:every_day/Widgets/tasksView.dart';
 import 'package:every_day/constant.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+
+import '../Services/firebaseHelper.dart';
 
 class Tasks extends StatefulWidget {
   @override
@@ -39,6 +42,9 @@ class TasksState extends State<Tasks> {
               centerTitle: true,
               backgroundColor: mainColor,
             ),
+
+
+
             body: ListView.builder(
                 itemCount: userSnapshot.length,
                 itemBuilder: (context, index) {
@@ -48,18 +54,43 @@ class TasksState extends State<Tasks> {
                         onTap: () {
                           setState(() {
                             Navigator.push(context, MaterialPageRoute(builder: (BuildContext ctx) {
-                              return TasksView(title: userSnapshot[index]["name"], description:  userSnapshot[index]["description"],hour:  userSnapshot[index]["date_created"],taskUid: userSnapshot[index]["task_uid"],);
+                              return TasksView(title: userSnapshot[index]["name"], description:  userSnapshot[index]["description"],hour:  userSnapshot[index]["date_created"],taskUid: userSnapshot[index]["task_uid"],date_finish_before:userSnapshot[index]["date_finish_before"]);
                             }));
                           });
                         },
-                        child: ListTile(
-                            title: CustomText("Title : " + userSnapshot[index]["name"],textAlign: TextAlign.start,),
-                            subtitle: CustomText("Description : " + userSnapshot[index]["description"], textAlign: TextAlign.end,),
-                            contentPadding: EdgeInsets.all(15.0),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                              side: BorderSide(color: mainColor),
-                            )
+                        child: Slidable(
+                          endActionPane: ActionPane(
+                            motion: StretchMotion(),
+                            children: [
+                              SlidableAction(
+                                backgroundColor: Colors.grey,
+                                icon: Icons.cancel_outlined,
+                                label: "Cancel",
+                                onPressed: (context) => null,
+                              ),
+
+                              SlidableAction(
+                                backgroundColor: Colors.red,
+                                icon: Icons.delete_outline,
+                                label: "Delete",
+                                onPressed: (context) {
+                                  setState(() {
+                                    FirebaseHelper().deleteTask(userSnapshot[index]["task_uid"]);
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
+                          child: ListTile(
+                              title: CustomText("Title : " + userSnapshot[index]["name"],textAlign: TextAlign.start,),
+                              subtitle: CustomText("Description : " + userSnapshot[index]["description"], textAlign: TextAlign.end,),
+                              contentPadding: EdgeInsets.all(15.0),
+                              //leading: Icon(Icons.restart_alt_outlined, color: Colors.yellowAccent,),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                                side: BorderSide(color: mainColor),
+                              )
+                          ),
                         ),
                       )
                   );

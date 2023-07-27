@@ -13,10 +13,11 @@ class FirebaseHelper {
           email: email, password: password);
       final User? user = userCredential.user;
       return user;
-    } on FirebaseAuthException catch (e) {
+    } on FirebaseAuthException catch  (e) {
       ShowPopUp().errorPopUp(context, e.message);
     }
   }
+
 
   Future<User?> signUp(BuildContext context, String email, String password,
       String username) async {
@@ -60,12 +61,12 @@ class FirebaseHelper {
     }
   }
 
-  Future deleteUser(String uid) async {
-    await user_instance.currentUser?.delete();
-    await fire_user.doc(uid).delete();
+  Future deleteUser() async {
+    await user_instance.currentUser!.delete();
+    //await fire_user.doc(uid).delete();
   }
 
-  Future addTask(String name, String description,) async  {
+  Future addTask(String name, String description, DateTime date_finish_before) async  {
 
     Map<String, dynamic> taskMap = {
       "name": name,
@@ -73,6 +74,7 @@ class FirebaseHelper {
       "date_created": DateTime.now(),
       "author_uid": user_instance.currentUser!.uid,
       "task_uid": "",
+      "date_finish_before": date_finish_before,
     };
     await addTaskToFirebase(taskMap);
   }
@@ -93,6 +95,12 @@ class FirebaseHelper {
   Future deleteTask(String taskUid) async {
     final taks_collection = fire_user.doc(user_instance.currentUser!.uid).collection("tasks");
     await taks_collection.doc(taskUid).delete();
+  }
+
+  Future changeUsername(String newUsername) async {
+    final username = fire_user.doc(user_instance.currentUser!.uid);
+    await username.update({'username': newUsername});
+    return true;
   }
 
 }

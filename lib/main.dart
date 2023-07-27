@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:every_day/Services/firebaseMessagingApi.dart';
 import 'package:every_day/Utils/cached_manager.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -7,6 +8,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_performance/firebase_performance.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Widgets/connection.dart';
@@ -16,6 +18,7 @@ import 'constant.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await FirebaseMessagingApi().initNotifications();
 
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
@@ -33,6 +36,8 @@ Future<void> main() async {
   _performance.app.setAutomaticDataCollectionEnabled(true);
   _performance.app.setAutomaticResourceManagementEnabled(true);
 
+  initializeDateFormatting('fr_FR',null);
+
   runApp(const Events());
 }
 
@@ -47,6 +52,7 @@ class Events extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primaryColor: mainColor,
+          useMaterial3: true
         ),
         home: StreamBuilder<User?>(
           stream: FirebaseAuth.instance.userChanges(),

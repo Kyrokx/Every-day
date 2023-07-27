@@ -66,36 +66,40 @@ class HomeState extends State<Home> {
             },
           ),
           floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-          bottomNavigationBar: BottomAppBar(
-            shape: CircularNotchedRectangle(),
+          floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
+          bottomNavigationBar:  BottomAppBar(
+              shape: const CircularNotchedRectangle(),
+              color: mainColor,
+              height: MediaQuery.of(context).size.height / 13,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisSize: MainAxisSize.max,
+                children: [
 
-            color: mainColor,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                BarItem(
-                    icon: Icon(
-                      Icons.task,
-                      color: Colors.white,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        buttonSelected(0);
-                      });
-                    },
-                    selected: (index == 0)),
-                BarItem(
-                    icon: Icon(Icons.supervisor_account, color: Colors.white),
-                    onPressed: () {
-                      setState(() {
-                        buttonSelected(1);
-                      });
-                    },
-                    selected: (index == 1)),
-              ],
-            ),
-          ));
+                  BarItem(
+                      icon: Icon(
+                        Icons.task,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          buttonSelected(0);
+                        });
+                      },
+                      selected: (index == 0)),
+                  BarItem(
+                      icon: Icon(Icons.supervisor_account, color: Colors.white),
+                      onPressed: () {
+                        setState(() {
+                          buttonSelected(1);
+                        });
+                      },
+                      selected: (index == 1)
+                  ),
+                ],
+              ),
+            )
+      );
     }
   }
 

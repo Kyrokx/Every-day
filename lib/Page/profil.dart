@@ -64,8 +64,8 @@ class ProfilState extends State<Profil> {
               ListTile(
                 contentPadding: EdgeInsets.all(10.0),
                 leading: Icon(Icons.account_box,color: easterEgg(),),
-                title: CustomText("Name : ${member!.username}",fontSize: 25.0,textAlign: TextAlign.start,),
-                subtitle: CustomText("Email :${member!.email}",fontSize: 19.0,textAlign: TextAlign.end,),
+                title: CustomText("Username : ${member!.username}",fontSize: 25.0,textAlign: TextAlign.start,),
+                subtitle: CustomText("Email : ${member!.email}",fontSize: 19.0,textAlign: TextAlign.end,),
                 onLongPress: () {
                   setState(() {
                     if(x < 3) {
@@ -74,7 +74,12 @@ class ProfilState extends State<Profil> {
                       x = 0;
                     }
                   });
-                }
+                },
+                onTap: () {
+                  setState(() {
+                    ShowPopUp().changeUsername(context, member!);
+                  });
+                },
               ),
 
               ListTile(
@@ -99,12 +104,12 @@ class ProfilState extends State<Profil> {
 
               /*ListTile(
                   title: CustomText("Delete Account",fontSize: 25.0,),
-                  leading: Icon(Icons.delete,color: easterEgg(),),
+                  leading: Icon(Icons.delete_forever_outlined,color: easterEgg(),),
                   onTap: () {
                     setState(() {
-                      ShowPopUp().deleteAcount(context,widget.memberUid);
+                      ShowPopUp().deleteAcount(context);
                     });
-                  }
+                  },
                   onLongPress: () {
                     setState(() {
                       if(x < 3) {
@@ -129,7 +134,7 @@ class ProfilState extends State<Profil> {
       } else if (x == 1){
         return Colors.red;
       }else if (x == 2){
-        return Colors.yellow;
+        return Colors.blue;
       }else if (x == 3){
         return Colors.green;
       }
