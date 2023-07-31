@@ -1,4 +1,4 @@
-import 'package:every_day/Utils/custonText.dart';
+import 'package:every_day/Utils/customText.dart';
 import 'package:every_day/constant.dart';
 import 'package:flutter/material.dart'
     '';

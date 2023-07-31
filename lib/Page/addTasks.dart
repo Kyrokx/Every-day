@@ -1,22 +1,23 @@
 import 'package:every_day/Services/firebaseHelper.dart';
-import 'package:every_day/Utils/custonText.dart';
+import 'package:every_day/Utils/customText.dart';
 import 'package:every_day/Utils/showPopUp.dart';
 import 'package:every_day/constant.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 
 class AddTasks extends StatefulWidget {
+  const AddTasks({super.key});
+
   @override
   State<StatefulWidget> createState() {
-    return new AddTasksState();
+    return AddTasksState();
   }
 }
 
 
 class AddTasksState extends State<AddTasks> {
-  late TextEditingController name_controller = TextEditingController();
-  late TextEditingController description_controller = TextEditingController();
+  late TextEditingController name_controller;
+  late TextEditingController description_controller;
 
   late FocusNode name_focus;
   late FocusNode description_focus;
@@ -24,23 +25,22 @@ class AddTasksState extends State<AddTasks> {
 
   @override
   void initState() {
-    super.initState();
     name_controller = TextEditingController();
     description_controller = TextEditingController();
     name_focus = FocusNode();
     description_focus = FocusNode();
-
-
+    super.initState();
   }
 
 
   @override
   void dispose() {
-    super.dispose();
+
     name_controller.dispose();
     description_controller.dispose();
     name_focus.dispose();
     description_focus.dispose();
+    super.dispose();
   }
 
 
@@ -50,8 +50,6 @@ class AddTasksState extends State<AddTasks> {
   @override
   Widget build(BuildContext context) {
 
-
-
     return GestureDetector(
         onTap: () {
       setState(() {
@@ -59,11 +57,6 @@ class AddTasksState extends State<AddTasks> {
       });
     },
       child: Scaffold(
-        /*appBar: AppBar(
-        title: CustomText('Add your task here !',fontSize: 25.0,),
-        centerTitle: true,
-        backgroundColor: mainColor,
-      ),*/
         body:Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -75,6 +68,7 @@ class AddTasksState extends State<AddTasks> {
                   controller: name_controller,
                   focusNode: name_focus,
                   cursorColor: mainColor,
+                  textInputAction: TextInputAction.next,
                   decoration: InputDecoration(
                     enabledBorder: const OutlineInputBorder(
                       borderRadius:
@@ -105,6 +99,7 @@ class AddTasksState extends State<AddTasks> {
                   controller: description_controller,
                   focusNode: description_focus,
                   cursorColor: mainColor,
+                  textInputAction: TextInputAction.done,
                   decoration: InputDecoration(
                     enabledBorder: const OutlineInputBorder(
                       borderRadius:
@@ -178,11 +173,10 @@ class AddTasksState extends State<AddTasks> {
   }
 
   check() {
-    if (name_controller.text.isNotEmpty ||
-    name_controller.text != " ") {
+    if (name_controller.text.isNotEmpty) {
       if(date_before.isNotEmpty || date_before != "") {
         setState(() {
-          FirebaseHelper().addTask(name_controller.text, (description_controller.text.isNotEmpty || description_controller.text != " ") ? description_controller.text : "No description set", dateTime_before);
+          FirebaseHelper().addTask(name_controller.text, (description_controller.text.isNotEmpty) ? description_controller.text : "No description set", dateTime_before);
           Navigator.pop(context);
           ShowPopUp().taskAdded(context);
         });
@@ -200,24 +194,19 @@ class AddTasksState extends State<AddTasks> {
   Future datePicker() async {
     DateTime? pickedDate = await showDatePicker(
         context: context,
-        firstDate: DateTime.now(),//DateTime(DateTime.now().year),
+        firstDate: DateTime.now(),
         lastDate: DateTime(DateTime.now().year + 2),
         initialDate: DateTime.now()
     );
 
     if (pickedDate != null ) {
       setState(() {
-        date_before = DateFormat.yMd().format(pickedDate!).toString();
+        date_before = DateFormat.yMd().format(pickedDate).toString();
         dateTime_before = pickedDate;
       });
     } else {
       return null;
     }
-
-    //return pickedDate;
-
-    /*var x = await DateFormat.yMd().add_Hm().format(pickedDate!);
-    return x;*/
 
   }
 

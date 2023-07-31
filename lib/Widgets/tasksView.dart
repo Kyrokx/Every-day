@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:every_day/Services/firebaseHelper.dart';
-import 'package:every_day/Utils/custonText.dart';
+import 'package:every_day/Utils/customText.dart';
 import 'package:every_day/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';

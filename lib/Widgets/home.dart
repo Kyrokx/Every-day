@@ -1,11 +1,10 @@
 import 'dart:async';
 
 import 'package:every_day/Page/addTasks.dart';
-import 'package:every_day/Page/profil.dart';
+import 'package:every_day/Page/profile.dart';
 import 'package:every_day/Page/tasks.dart';
 import 'package:every_day/Services/firebaseHelper.dart';
 import 'package:every_day/Utils/barItem.dart';
-import 'package:every_day/Utils/cached_manager.dart';
 import 'package:every_day/Utils/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:every_day/constant.dart';
@@ -27,7 +26,6 @@ class HomeState extends State<Home> {
 
   @override
   void initState() {
-    super.initState();
     streamSubscription = FirebaseHelper()
         .fire_user
         .doc(widget.memberUid)
@@ -37,17 +35,18 @@ class HomeState extends State<Home> {
         member = Member(event);
       });
     });
+    super.initState();
   }
 
   @override
   void dispose() {
-    super.dispose();
     streamSubscription.cancel();
+    super.dispose();
   }
 
-  @override
   int index = 0;
 
+  @override
   Widget build(BuildContext context) {
     if (member == null) {
       return Loading();
@@ -55,7 +54,6 @@ class HomeState extends State<Home> {
       return Scaffold(
           body: showPage(),
           floatingActionButton: FloatingActionButton(
-            child: Icon(Icons.add_task),
             backgroundColor: mainColor,
             onPressed: () {
               setState(() {
@@ -64,20 +62,21 @@ class HomeState extends State<Home> {
                 }));
               });
             },
+            child: const Icon(Icons.add_task),
           ),
           floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
           floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
           bottomNavigationBar:  BottomAppBar(
               shape: const CircularNotchedRectangle(),
               color: mainColor,
-              height: MediaQuery.of(context).size.height / 13,
+              height: height / 13,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 mainAxisSize: MainAxisSize.max,
                 children: [
 
                   BarItem(
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.task,
                         color: Colors.white,
                       ),
@@ -88,7 +87,7 @@ class HomeState extends State<Home> {
                       },
                       selected: (index == 0)),
                   BarItem(
-                      icon: Icon(Icons.supervisor_account, color: Colors.white),
+                      icon: const Icon(Icons.supervisor_account, color: Colors.white),
                       onPressed: () {
                         setState(() {
                           buttonSelected(1);
@@ -114,7 +113,7 @@ class HomeState extends State<Home> {
       case 0:
         return Tasks();
       case 1:
-        return Profil(
+        return Profile(
           memberUid: widget.memberUid,
         );
     }

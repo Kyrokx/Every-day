@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:every_day/Utils/custonText.dart';
+import 'package:every_day/Utils/customText.dart';
 import 'package:every_day/Utils/loading.dart';
 import 'package:every_day/Widgets/tasksView.dart';
 import 'package:every_day/constant.dart';
@@ -10,9 +10,11 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import '../Services/firebaseHelper.dart';
 
 class Tasks extends StatefulWidget {
+  const Tasks({super.key});
+
   @override
   State<StatefulWidget> createState() {
-    return new TasksState();
+    return TasksState();
   }
 }
 
@@ -40,7 +42,7 @@ class TasksState extends State<Tasks> {
             appBar: AppBar(
               title: CustomText("Task Manager", fontSize: 30.0,),
               centerTitle: true,
-              backgroundColor: mainColor,
+              backgroundColor: neutralColor,
             ),
 
 
@@ -49,7 +51,7 @@ class TasksState extends State<Tasks> {
                 itemCount: userSnapshot.length,
                 itemBuilder: (context, index) {
                   return Padding(
-                      padding: EdgeInsets.all(10.0),
+                      padding: const EdgeInsets.all(10.0),
                       child: InkWell(
                         onTap: () {
                           setState(() {
@@ -60,13 +62,13 @@ class TasksState extends State<Tasks> {
                         },
                         child: Slidable(
                           endActionPane: ActionPane(
-                            motion: StretchMotion(),
+                            motion: const StretchMotion(),
                             children: [
                               SlidableAction(
                                 backgroundColor: Colors.grey,
                                 icon: Icons.cancel_outlined,
                                 label: "Cancel",
-                                onPressed: (context) => null,
+                                onPressed: (context) {},
                               ),
 
                               SlidableAction(
@@ -82,10 +84,9 @@ class TasksState extends State<Tasks> {
                             ],
                           ),
                           child: ListTile(
-                              title: CustomText("Title : " + userSnapshot[index]["name"],textAlign: TextAlign.start,),
-                              subtitle: CustomText("Description : " + userSnapshot[index]["description"], textAlign: TextAlign.end,),
-                              contentPadding: EdgeInsets.all(15.0),
-                              //leading: Icon(Icons.restart_alt_outlined, color: Colors.yellowAccent,),
+                              title: CustomText("Title : ${userSnapshot[index]["name"]}",textAlign: TextAlign.start,),
+                              subtitle: CustomText("Description : ${userSnapshot[index]["description"]}", textAlign: TextAlign.end,),
+                              contentPadding: const EdgeInsets.all(15.0),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20),
                                 side: BorderSide(color: mainColor),

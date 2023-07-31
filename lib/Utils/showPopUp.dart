@@ -1,7 +1,7 @@
-import 'dart:io';
 import 'package:every_day/Models/member.dart';
 import 'package:every_day/Services/firebaseHelper.dart';
-import 'package:every_day/Utils/custonText.dart';
+import 'package:every_day/Utils/customText.dart';
+import 'package:every_day/Utils/yesButton.dart';
 import 'package:every_day/constant.dart';
 import 'package:flutter/material.dart';
 
@@ -9,7 +9,7 @@ class ShowPopUp {
 
 
 
-  Future errorPopUp(@required context, @required message) async {
+  Future errorPopUp(context, message) async {
     return showDialog(
         context: context,
         barrierDismissible: true,
@@ -23,7 +23,7 @@ class ShowPopUp {
         });
   }
 
-  Future logOut(@required context) async {
+  Future logOut(context) async {
     return showDialog(
         context: context,
         barrierDismissible: false,
@@ -34,76 +34,32 @@ class ShowPopUp {
             title: CustomText("Log out"),
             content: CustomText("Do you really want to log-out ?"),
             actions: [
-              _noLogOutButton(context),
-              _yesLogOutButton(context),
+              no(context),
+              yes(context),
             ],
           );
         });
   }
 
-  _yesLogOutButton(BuildContext context) {
-    return TextButton(
+  Widget yes(BuildContext ctx){
+    return YesButton(
+        title: "Yes, I do ",
+        color: Colors.red,
         onPressed: () {
-          FirebaseHelper().signOut(context);
-          Navigator.pop(context);
+          FirebaseHelper().signOut(ctx);
+          Navigator.pop(ctx);
         },
-        child: CustomText(
-          "Yes, I do",
-          color: Colors.red,
-        ));
+    );
   }
 
-  _noLogOutButton(BuildContext context) {
-    return TextButton(
-        onPressed: () {
-          Navigator.pop(context);
-        },
-        child: CustomText(
-          "No, I don't",
-          color: Colors.green,
-        ));
-  }
-
-
-  Future deleteAcount(@required context,) async {
-    return showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext ctx) {
-          return AlertDialog(
-            icon: Icon(Icons.delete),
-            backgroundColor: mainColor,
-            title: CustomText("Delete"),
-            content: CustomText("⚠ | Be carefull,do you really want to delete your account ?. This action is irreversible"),
-            actions: [
-              _noDeleteButton(context),
-              _yesDeleteButton(context),
-            ],
-          );
-        });
-  }
-
-  _yesDeleteButton(BuildContext context) {
-    return TextButton(
-        onPressed: () {
-          FirebaseHelper().deleteUser();
-          Navigator.pop(context);
-        },
-        child: CustomText(
-          "Yes, I do",
-          color: Colors.red,
-        ));
-  }
-
-  _noDeleteButton(BuildContext context) {
-    return TextButton(
-        onPressed: () {
-          Navigator.pop(context);
-        },
-        child: CustomText(
-          "No, I don't",
-          color: Colors.green,
-        ));
+  Widget no(BuildContext ctx){
+    return YesButton(
+      title: "Yes, I don't ",
+      color: Colors.green,
+      onPressed: () {
+        Navigator.pop(ctx);
+      },
+    );
   }
 
   Future taskAdded(BuildContext context) async {
@@ -137,9 +93,9 @@ class ShowPopUp {
   }
 
 
-  TextEditingController newUserName_controller = TextEditingController();
+  //TextEditingController newUserName_controller = TextEditingController();
 
-  Future changeUsername(@required context, @required Member member) async {
+  Future changeUsername(context, Member member, TextEditingController newUserName_controller) async {
     return showDialog(
         context: context,
         barrierDismissible: false,
@@ -178,19 +134,22 @@ class ShowPopUp {
               ),
             ),
             actions: [
-              _noChangeButton(context),
-              _yesChangeButton(context),
+              noChange(context),
+              yesChange(context,newUserName_controller),
             ],
           );
         });
   }
 
-  _yesChangeButton(BuildContext context) {
-    return TextButton(
+  Widget yesChange(BuildContext ctx,TextEditingController newUserName_controller) {
+    return YesButton(
+        title: "Yes, I do ",
+        color: Colors.green,
         onPressed: () {
-          if(newUserName_controller.text.isNotEmpty || newUserName_controller.text != "" || newUserName_controller.text != null || !newUserName_controller.text.contains(" ")){
+          if (newUserName_controller.text.isNotEmpty &
+              !newUserName_controller.text.contains(" ")) {
             FirebaseHelper().changeUsername(newUserName_controller.text);
-            Navigator.pop(context);
+            Navigator.pop(ctx);
             //---------------------------------------------//
 
             final snackBarChanged = SnackBar(
@@ -205,14 +164,12 @@ class ShowPopUp {
               ),
             );
 
-            ScaffoldMessenger.of(context).showSnackBar(snackBarChanged);
-
-
+            ScaffoldMessenger.of(ctx).showSnackBar(snackBarChanged);
           } else {
-            Navigator.pop(context);
+            Navigator.pop(ctx);
             final snackBarError = SnackBar(
               backgroundColor: mainColor,
-              content: CustomText("Oups, there is an error"),
+              content: CustomText("Oups, there is an error ( Try to remove space(s) )"),
               action: SnackBarAction(
                 backgroundColor: mainColor,
                 label: 'dismiss',
@@ -222,25 +179,21 @@ class ShowPopUp {
               ),
             );
 
-            ScaffoldMessenger.of(context).showSnackBar(snackBarError);
-
+            ScaffoldMessenger.of(ctx).showSnackBar(snackBarError);
           }
-        },
-        child: CustomText(
-          "Save",
-          color: Colors.green,
-        ));
+
+        }
+    );
   }
 
-  _noChangeButton(BuildContext context) {
-    return TextButton(
-        onPressed: () {
-          Navigator.pop(context);
-        },
-        child: CustomText(
-          "Cancel",
-          color: Colors.red,
-        ));
+  Widget noChange(BuildContext ctx){
+    return YesButton(
+      title: "Cancel",
+      color: Colors.red,
+      onPressed: () {
+        Navigator.pop(ctx);
+      },
+    );
   }
 
 }

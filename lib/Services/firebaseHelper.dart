@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 class FirebaseHelper {
   final user_instance = FirebaseAuth.instance;
 
-  Future<User?> LogIn(
+  Future LogIn(
       BuildContext context, String email, String password) async {
     try {
       final userCredential = await user_instance.signInWithEmailAndPassword(
@@ -19,7 +19,7 @@ class FirebaseHelper {
   }
 
 
-  Future<User?> signUp(BuildContext context, String email, String password,
+  Future signUp(BuildContext context, String email, String password,
       String username) async {
     try {
       final userCredential = await user_instance.createUserWithEmailAndPassword(
@@ -29,7 +29,6 @@ class FirebaseHelper {
       Map<String, dynamic> memberMap = {
         "username": username,
         "email": email,
-        "password": password,
         "uid": user?.uid,
         "date_created": DateTime.now(),
       };
@@ -59,11 +58,6 @@ class FirebaseHelper {
     } on FirebaseAuthException catch (e) {
       ShowPopUp().errorPopUp(context, e.message);
     }
-  }
-
-  Future deleteUser() async {
-    await user_instance.currentUser!.delete();
-    //await fire_user.doc(uid).delete();
   }
 
   Future addTask(String name, String description, DateTime date_finish_before) async  {
